@@ -15,7 +15,7 @@ bool space;
 
 SDL_Rect defPos;
 
-void writeDownAt( std::string text, int x, int y )
+void writeDownAt( std::string text, int x, int y )  //writes text at position x,y in the defautl screen
 {
 	if( space )
 	{

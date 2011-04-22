@@ -1,5 +1,3 @@
-CC = g++
-
 CLIDIR = client
 SERDIR = server
 
