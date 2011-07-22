@@ -1,59 +1,23 @@
 #include "convert.h"
 
-void convertMoveCommand( int & deltaX, int & deltaY, std::string cmd )
+dVector convertMoveCommand( std::string cmd )
 {
 	if( cmd == "north" )
-	{
-		deltaX = 0;
-		deltaY = -1;
-		return;
-	}
+		return dVector(0,-1);
 	else if( cmd == "south" )
-	{
-		deltaX = 0;
-		deltaY = 1;
-		return;
-	}
+		return dVector(0,1);
 	else if( cmd == "east" )
-	{
-		deltaX = 1;
-		deltaY = 0;
-		return;
-	}
+		return dVector(1,0);
 	else if( cmd == "west" )
-	{
-		deltaX = -1;
-		deltaY = 0;
-		return;
-	}
+		return dVector(-1,0);
 	else if( cmd == "northwest" )
-	{
-		deltaX = -1;
-		deltaY = -1;
-		return;
-	}
+		return dVector(-1,-1);
 	else if( cmd == "southeast" )
-	{
-		deltaX = 1;
-		deltaY = 1;
-		return;
-	}
+		return dVector(1,1);
 	else if( cmd == "northeast" )
-	{
-		deltaX = 1;
-		deltaY = -1;
-		return;
-	}
+		return dVector(-1,1);
 	else if( cmd == "southwest" )
-	{
-		deltaX = -1;
-		deltaY = 1;
-		return;
-	}
+		return dVector(1,-1);
 	else
-	{
-		deltaX = 0;
-		deltaY = 0;
-		return;
-	}
+		return dVector(0,0);
 }

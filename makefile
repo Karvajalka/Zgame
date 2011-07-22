@@ -3,11 +3,11 @@ SERDIR = server
 
 wclient: client/read_configs.o
 	@cd $(CLIDIR) ; make all
-	@cp client/zclient.exe zclient.exe
+	@cp client/zclient.exe testfolder/zclient.exe
 	
-wserver: server/world.o
+wserver: 
 	@cd $(SERDIR) ; make all
-	@cp server/zserver.exe zserver.exe
+	@cp server/zserver.exe testfolder/zserver.exe
 
 wall:
 	make wclient

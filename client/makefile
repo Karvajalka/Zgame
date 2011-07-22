@@ -14,7 +14,7 @@ SDL_print.o: SDL_print.cpp SDL_print.h
 	$(CC) -c SDL_print.cpp `sdl-config --cflags --libs`
 	
 gui.o: gui.cpp gui.h SDL_print.h
-	$(CC) -c gui.cpp `sdl-config --cflags --libs`
+	$(CC) -c gui.cpp `sdl-config --cflags --libs` -lSDL_ttf 
 
 main.o: main.cpp main.h network.h network_init.h SDL_init.h read_configs.h input.h
 	$(CC) -c main.cpp `sdl-config --cflags --libs`

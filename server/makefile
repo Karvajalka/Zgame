@@ -1,6 +1,7 @@
 CC = g++
+CFLAGS = -std=c++0x
 SCFLAGS = `sdl-config --cflags --libs` -lSDL_net 
-SERVERO = main.o network.o network_init.o client.o string_ext.o convert.o world.o 
+SERVERO = main.o network.o network_init.o client.o string_ext.o convert.o world.o dvector.o
 
 all: $(SERVERO) zserver
 
@@ -12,12 +13,15 @@ network.o: network.cpp network.h client.h
 
 client.o: client.cpp client.h string_ext.h network.h convert.h
 	$(CC) -c client.cpp $(SCFLAGS)
+	
+main.o: main.cpp main.h network.h network_init.h
+	$(CC) -c main.cpp $(SCFLAGS)
 
 %.o : %.c
-	$(CC) –c $(.SOURCE) $(SCFLAGS)
+	$(CC)  –c $(.SOURCE) $(SCFLAGS)
 	
-zserver:
-	$(CC) $(SERVERO) -o zserver $(SCFLAGS)
+zserver: $(SERVERO)
+	$(CC)  $(SERVERO) -o zserver $(SCFLAGS)
 
 clean: 
 	rm -f $(SERVERO)

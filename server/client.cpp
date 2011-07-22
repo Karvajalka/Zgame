@@ -7,18 +7,11 @@
 
 int viewDistance = 10;
 
-void updatePosition( Client * t, int x, int y )
-{
-	t->xp = x;
-	t->yp = y;
-}
-
 void Client::processMove( std::string direction )
 {
-	int deltaX = 0, deltaY = 0;
-	convertMoveCommand( deltaX, deltaY, direction );
-	if( !world->getTile( xp + deltaX, yp + deltaY )->block )
-		updatePosition( this, xp + deltaX, yp + deltaY );
+	dVector newPos = pos + convertMoveCommand( direction );
+	if( !area->getTile( newPos )->block )
+		pos = newPos;
 }
 
 void Client::processRecieve()
@@ -52,7 +45,7 @@ void Client::sendView()
 	{
 		for( int y = 0 - viewDistance; x < viewDistance + 1; x++ )
 		{
-			Tile* t = world->getTile( xp + x, yp + y );
+			Tile* t = area->getTile( pos + dVector ( x,y ) );
 			sendBuffer.push_back( t->base );
 		}
 		sendBuffer.push_back( '\n' );

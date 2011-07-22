@@ -40,3 +40,12 @@ void writeDownAt( std::string text, int x, int y )  //writes text at position x,
 	}
 }
 
+void fillRect( SDL_Rect rectangle, int r, int b, int g )
+{
+	rectangle.x*=xSize;
+	rectangle.y*=ySize;
+	rectangle.w*=xSize;
+	rectangle.h*=ySize;
+	SDL_FillRect( screen , &rectangle , SDL_MapRGB(screen->format , r , b , g) );
+}
+

@@ -8,16 +8,16 @@ TTF_Font *font = NULL;
 SDL_Surface *screen = NULL;
 
 const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32;
 
-int fontsize = 20;
-int xSize = fontsize - 4;
-int ySize = fontsize + 4;
+int fontsize = 12;
+int borderSize = 4; // if you print a single sign, this determines the amount of space around it
+int xSize = fontsize - borderSize;
+int ySize = fontsize + borderSize;
 
 SDL_Color fontbgcolor = { 0, 0, 0 };
 SDL_Color fontcolor = { 255, 255, 255 };
-
 
 bool init_SDL()
 {
@@ -62,3 +62,21 @@ void close_SDL()
    TTF_Quit();
 }
 
+SDL_Rect newRectangle( int x, int y, int w, int h ) // wanted an easy way to get rectangles
+{
+	SDL_Rect a; 
+	a.x = x; 
+	a.y = y; 
+	a.h = h; 
+	a.w = w;
+	return a;
+}
+
+SDL_Color newColour( int r, int b, int g )
+{
+	SDL_Color a;
+	a.r = r;
+	a.b = b;
+	a.g = g;
+	return a;
+}

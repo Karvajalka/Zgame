@@ -2,8 +2,14 @@
 #define WORLD_H
 
 #include <vector>
-
+#include <iostream>
+#include "dvector.h"
 extern int areaSize;
+
+class Trigger
+{
+	
+};
 
 class Tile
 {
@@ -20,9 +26,9 @@ class Tile
 class Area
 {
 	public:
-		int x,y;
+		int id;
 		std::vector< std::vector< Tile* > > tilemap;
-		Tile* getTile( int x, int y);
+		Tile* getTile( dVector pos );
 		Area()
 		{
 			std::vector< Tile* > tiles( areaSize, (Tile*)NULL );
@@ -39,14 +45,9 @@ class World
 {
 	public:
 		std::vector < Area* > areaVec;
-		bool loadArea( int x, int y );
-		void saveArea( int a );
 		void unloadArea( int a );
-		Tile* getTile( int x, int y );
 };
 
-
-int findPosDat( int x, int y );
 void printArea( int a, World * world );
 
 

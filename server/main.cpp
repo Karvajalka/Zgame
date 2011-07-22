@@ -1,8 +1,5 @@
-#include "main.h"
-#include "network_init.h"
-#include "network.h"
-#include "world.h"
 #include <iostream>
+#include "SDL.h"
 
 #if defined(WIN32)
 
@@ -10,22 +7,35 @@
 
 #endif
 
+#include "main.h"
+#include "network_init.h"
+#include "network.h"
+#include "world.h"
+
+const int DELAY_AMOUNT = 20;
+
+#if defined(WIN32)
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR
+lpCmdLine, int nCmdShow )
+
+#else
+
 int main()
+
+#endif
 {
 	if ( !initNetwork() )
 		return 0;
 	World * world = new World;
-	world->loadArea( 1, 2 );
-	world->areaVec[0]->x = 9;
-	//Area * area = new Area;
-	//area->x = 2;
-	//area->y = 2;
-	//world->areaVec.push_back( area );
+	Area * a = new Area();
+	world->areaVec.push_back(a);
+	world->areaVec[0]->id = 9;
 	printArea( 0, world );
-	world->saveArea( 0 );
 	while ( true )  //mainloop
 	{
 		checkNewConnection(); //check for incoming connections
 		checkRecieve();  //check for incoming stuff
+		SDL_Delay( DELAY_AMOUNT );
 	}
 }

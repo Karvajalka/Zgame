@@ -18,7 +18,7 @@
 
 extern SDL_Surface *screen;
 
-const int DELAY_AMOUNT = 20;
+const int DELAY_AMOUNT = 200;
 bool running = 1;
 
 #if defined(WIN32)

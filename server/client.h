@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include "SDL_net.h"
+#include "dvector.h"
 #include <string>
 #include "world.h"
 
@@ -9,14 +10,18 @@ class Client
 {
 	public:
 		TCPsocket clientSocket;
-		int xp, yp;
+		dVector pos;
 		std::string clientName;
 		std::string recieveBuffer;
 		void processRecieve();
 		void processMove( std::string direction );
 		void sendView();
-		World* world;
+		Area* area;
 		void send( std::string message );
+		Client()
+		{
+		pos = dVector( 20, 20 );
+		}
 };
 
 
