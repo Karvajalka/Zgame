@@ -11,12 +11,12 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 480;
 const int SCREEN_BPP = 32;
 
-int fontsize = 12;
+int fontsize = 12; // SCREEN_WIDTH/70
 int borderSize = 4; // if you print a single sign, this determines the amount of space around it
 int xSize = fontsize - borderSize;
 int ySize = fontsize + borderSize;
 
-SDL_Color fontbgcolor = { 0, 0, 0 };
+SDL_Color fontbgcolor = { 0, 0, 0 }; 
 SDL_Color fontcolor = { 255, 255, 255 };
 
 bool init_SDL()

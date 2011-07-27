@@ -3,6 +3,8 @@
 #include "SDL_print.h"
 #include "SDL_net.h"
 #include "gui.h"
+#include "messages.h"
+#include "map.h"
 
 extern TCPsocket serverSocket;
 extern SDLNet_SocketSet set;
@@ -33,10 +35,31 @@ void checkRecieve()  //checks if there is something to recieve and recives it in
 	}
 }
 
+std::string recieveLine()
+{
+	char buffer[2];
+	std::string recieved;
+	while( true )
+	{
+		SDLNet_TCP_Recv( serverSocket, buffer, 1 );
+		if( buffer[0] != '\n' )
+			recieved.push_back( buffer[0] );
+		else
+		{
+			return recieved;
+		}
+	}
+}
+
 void processRecieve( std::string message )  //figures out what to do with the recieved stuff
 {
-	newMessage( message );
-	printMessages();
+	std::cout << message << std::endl;
+	if( message == "!map" )
+	{
+		updateMap( recieveLine() );
+	}
+	//newMessage( message );
+	//printMessages();
 	//writeDownAt( message, 0,0 );
 	//std::cout << message << std::endl;
 	

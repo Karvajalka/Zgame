@@ -32,8 +32,8 @@ void writeDownAt( std::string text, int x, int y )  //writes text at position x,
 	}
 	else
 	{
-		defPos.x = x * ( fontsize - 4 );
-		defPos.y = y * ( fontsize + 4 );
+		defPos.x = x * xSize;
+		defPos.y = y * ySize;
 		SDL_Surface * resulting_text = TTF_RenderText_Shaded( font, text.c_str(), fontcolor, fontbgcolor );
 		SDL_BlitSurface( resulting_text , NULL , screen , &defPos );
 		SDL_FreeSurface( resulting_text );

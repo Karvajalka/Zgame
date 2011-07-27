@@ -9,6 +9,7 @@ extern TCPsocket listenSocket;
 std::vector< TCPsocket > clientSockets;  //list of all active sockets
 std::vector< Client* > clientVec;
 
+extern World * world;
 int playerCount = 0;
 
 void sentToClient( TCPsocket theclient, std::string str ) // send string to client
@@ -31,6 +32,7 @@ void checkNewConnection()
 		SDLNet_TCP_AddSocket( socketSet, cSocket );  // add the socket to socketSet
 		Client * p = new Client;		//create new client and assign the socket to it, pushpack the client + socket to different lists
 		p->clientSocket = cSocket;
+		p->area = world->areaVec[0];
 		clientVec.push_back( p );
 		clientSockets.push_back( cSocket );
 		playerCount++;

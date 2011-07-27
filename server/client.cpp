@@ -5,7 +5,14 @@
 #include "network.h"
 #include "convert.h"
 
+extern std::vector< Client* > clientVec;
 int viewDistance = 10;
+
+void playerCheck()
+{
+	for( int x = 0; x < clientVec.size(); x++ )
+		clientVec[x]->sendView();
+}
 
 void Client::processMove( std::string direction )
 {
@@ -27,8 +34,11 @@ void Client::processRecieve()
 		}
 		else if( words[0] == "say" ) // it thinks it's a chat message
 		{
-			sendToAll( clientName + " says:" + recieveBuffer + "\n" );
-			std::cout << clientName << " says:" << recieveBuffer << std::endl;
+			std::string stuffSaid;
+			for( int x = 1; x < words.size() ; x++ )
+				stuffSaid += ( " " + words[x] );
+			sendToAll( clientName + " says:" + stuffSaid + "\n" );
+			std::cout << clientName << " says:" << stuffSaid << std::endl;
 		}
 		else if( words[0] == "move" )
 		{
@@ -41,15 +51,17 @@ void Client::sendView()
 {
 	std::string sendBuffer;
 	sendBuffer.clear();
+	sendBuffer = "!map\n";
 	for( int x = 0 - viewDistance; x < viewDistance + 1; x++ )
 	{
-		for( int y = 0 - viewDistance; x < viewDistance + 1; x++ )
+		for( int y = 0 - viewDistance; y < viewDistance + 1; y++ )
 		{
 			Tile* t = area->getTile( pos + dVector ( x,y ) );
 			sendBuffer.push_back( t->base );
 		}
-		sendBuffer.push_back( '\n' );
+		//sendBuffer.push_back( '\n' );
 	}
+	sendBuffer.push_back( '\n' );
 	send( sendBuffer );
 }
 

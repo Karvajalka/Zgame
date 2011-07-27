@@ -6,6 +6,6 @@
 void sendServer( std::string message );
 void checkRecieve();
 void processRecieve( std::string message );
-
+std::string recieveLine();
 
 #endif

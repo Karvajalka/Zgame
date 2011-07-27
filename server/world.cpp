@@ -9,7 +9,10 @@ int areaSize = 63; // 2 must not divide areasize
 
 Tile* Area::getTile( dVector pos )
 {
-	return tilemap[ pos.x ][ pos.y ];//must take the module too, no net so idk how, 
+	if( pos.x > 0 && pos.y > 0 && pos.x < areaSize && pos.y < areaSize )
+		return tilemap[ pos.x ][ pos.y ];//must take the module too, no net so idk how, 
+	else 
+		return tilemap[ 1][ 1 ];
 }
 
 void World::unloadArea( int a )

@@ -6,6 +6,8 @@
 #include <string>
 #include "world.h"
 
+void playerCheck();
+
 class Client
 {
 	public:

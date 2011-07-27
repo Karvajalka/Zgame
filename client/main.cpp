@@ -15,10 +15,11 @@
 #include "network.h"
 #include "input.h"
 #include "gui.h"
+#include "map.h"
 
 extern SDL_Surface *screen;
 
-const int DELAY_AMOUNT = 200;
+const int DELAY_AMOUNT = 20;
 bool running = 1;
 
 #if defined(WIN32)
@@ -45,7 +46,8 @@ int main()
 		return 0;
 	}
 	std::cout << "Connection established" << std::endl;
-	initializeGui();
+	initializeMap();
+	//initializeGui();
    //if( read_configs )
       //return 0;
 	while( running ) //main loop
@@ -53,6 +55,7 @@ int main()
 		checkRecieve();
 		getInput();
 		SDL_Delay( DELAY_AMOUNT );
+		renderView();
 	}
 	close_SDL();
 	return 1;

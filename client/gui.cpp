@@ -3,26 +3,36 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "gui.h"
+#include "messages.h"
 #include "SDL_print.h"
 #include "SDL_init.h"
-
-const int messageViewHeight = 20;
-const int messageViewLength = 40;
-const int messageXdelta = 24;
+#include "map.h"
 
 extern int xSize;
 extern int ySize;
 
-SDL_Rect viewRect = newRectangle( 0, 0, 20, 20 );
+/*
+extern const int messageViewHeight;
+extern const int messageViewLength;
+extern const int messageXdelta;
+extern std::vector< std::string > messageView;
+*/
+
+SDL_Rect viewRect = newRectangle( 0, 0, 21, 21 );
 SDL_Rect messageRect = newRectangle( 24, 0, 40, 20 );
 
 extern SDL_Surface *screen;
 extern TTF_Font *font;
 
 
+void renderView()
+{
+	fillRect( viewRect, 0, 0, 0 );
+	printMap();
+	SDL_Flip(screen);
+}
+/*
 GuiArea chatBox( 20, 0, 40, 20 );
-
-std::vector< std::string > messageView;
 
 void initializeGui()
 {
@@ -34,33 +44,6 @@ void initializeGui()
 	chatBox.fontFc = newColour( 255, 255, 255 );
 	chatBox.space = 0;
 	chatBox.quality = 2;
-}
-
-void newMessage( std::string message )
-{
-	int rows = 1;
-	int a = message.size();
-	while( a > messageViewLength )  // calculates how many new rows will be added
-	{
-		rows++;
-		a -= messageViewLength;
-	}
-	
-	for( int x = messageViewHeight - 1; x > rows-1; x-- )  // moves all the messages down by the amount of to be added rows
-		messageView[x] = messageView[x-rows];
-
-	for( int x = 0; x < rows; x++ )  //copies the new message there;
-		messageView[x] = message.substr ( x*messageViewLength, messageViewLength );
-}
-
-void printMessages()
-{
-	chatBox.fillColour( chatBox.baseColour );
-	//fillRect( messageRect, 100, 100, 100 );
-	for( int y = 0; y < messageViewHeight; y++ )
-		chatBox.printText( messageView[y], 0, y );
-		//writeDownAt( messageView[y], messageXdelta, y );
-	SDL_Flip( screen );
 }
 
 void GuiArea::fillColour( SDL_Color colour )
@@ -112,5 +95,5 @@ void GuiArea::printText( std::string text, int x, int y )
 		SDL_FreeSurface( resulting_text );
 	}
 }
-
+*/
 

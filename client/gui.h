@@ -4,8 +4,7 @@
 #include <SDL.h>
 
 void initializeGui();
-void newMessage( std::string message );
-void printMessages();
+void renderView();
 
 class GuiArea
 {
@@ -17,6 +16,7 @@ class GuiArea
 		SDL_Color fontBc;   	//font colour
 		SDL_Color fontFc;		//font bg colour
 		SDL_Color baseColour;	//base colour for the whole area
+		int xSize, ySize;
 		void fillColour( SDL_Color colour );
 		void printText( std::string text, int x, int y );
 		void printOffsetText( std::string text, int x, int y, int xOff, int yOff );
