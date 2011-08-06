@@ -1,9 +1,17 @@
 #ifndef INPUT_H
 #define INPUT_H
+#include <string>
 
-void getInput();
-void processInput( std::string input );
-std::string getChar();
-std::string getString();
-
+class inputModule
+{
+	public:
+		bool gotInput;
+		bool typing;
+		SDL_Event event;
+		std::string inputBuffer;
+		
+		void getInput();
+		std::string getChar();
+		std::string getString();
+};
 #endif

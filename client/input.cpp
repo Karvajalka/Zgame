@@ -1,22 +1,13 @@
-#include <string>
 #include <iostream>
 #include "SDL.h"
 #include "input.h"
-#include "network.h"
 
-SDL_Event event;
-
-extern bool running;
-extern bool loadFont();
-
-void getInput()
+void inputModule::getInput()
 {
-        static std::string inputBuffer;
-        static bool typing;
-        if( SDL_PollEvent( &event ) )  //key pressed?
-        {
-                if( event.type == SDL_KEYDOWN )
-                {
+	if( SDL_PollEvent( &event ) )  //key pressed?
+	{
+		if( event.type == SDL_KEYDOWN )
+		{
 			unsigned char ch;				
 			if( event.key.keysym.unicode < 0x80 && event.key.keysym.unicode > 0 )
 			{
@@ -28,8 +19,8 @@ void getInput()
 					else //otherwise just figures what action is bound to the key
 					{
 						inputBuffer.push_back( ch );
-						processInput( inputBuffer );
-						inputBuffer.clear();
+						gotInput = true;
+						return;
 					}
 				}
 				else  //if he is, he continues typing unless he presses enter, which sends the message
@@ -39,24 +30,22 @@ void getInput()
 					else
 					{
 						typing = false;
-						processInput( inputBuffer );
-						inputBuffer.clear();
+						gotInput = true;
+						return;
 					}
 				}
 			}
 		}
 		else if( event.type == SDL_QUIT ) // if players presses the x in the upper corner, the program quits
-			running = false;   
+		{
+			gotInput = true;
+			inputBuffer = "/quit";
+			return;
 		}
+	}
 }
 
-void processInput( std::string input )
-{
-	std::cout << input << std::endl;
-	sendServer( input + "\n" );
-}
-
-std::string getString()  // gets a text input
+std::string inputModule::getString()  // gets a text input
 {
 	std::string sString;
 	sString.clear();
@@ -77,12 +66,16 @@ std::string getString()  // gets a text input
 				}
 			}
 			else if( event.type == SDL_QUIT )
-				running = false;
+			{
+				gotInput = true;
+				inputBuffer = "/quit";
+				return "/quit";
+			}
 		}
 	}
 }
 
-std::string getChar() // gets an input of one char
+std::string inputModule::getChar() // gets an input of one char
 {
 	std::string sChar;
         sChar.clear();
@@ -101,7 +94,11 @@ std::string getChar() // gets an input of one char
 		        	}
 		        }
 	        	else if( event.type == SDL_QUIT )
-	        		running = false;
+	        	{
+					gotInput = true;
+					inputBuffer = "/quit";
+					return " ";
+				}
 	        }
         }
 }

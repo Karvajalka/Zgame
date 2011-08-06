@@ -10,13 +10,12 @@
 #include "main.h"
 #include "SDL_init.h"
 #include "SDL_print.h"
-#include "network_init.h"
 #include "read_configs.h"
-#include "network.h"
-#include "input.h"
 #include "gui.h"
 #include "map.h"
 
+
+engine gameEngine;
 extern SDL_Surface *screen;
 
 const int DELAY_AMOUNT = 20;
@@ -40,7 +39,7 @@ int main()
 		return 0;
 	std::cout << "SDL initializedl" << std::endl;
 	
-	if( initConnection() == -1 )
+	if( gameEngine.netMod.initConnection() == -1 )
 	{
 		std::cout << "failed to establish connection" << std::endl;
 		return 0;
@@ -50,13 +49,48 @@ int main()
 	//initializeGui();
    //if( read_configs )
       //return 0;
+	close_SDL();
+	return 1;
+}
+
+void engine::mainLoop()
+{
 	while( running ) //main loop
 	{
-		checkRecieve();
-		getInput();
+		netMod.checkRecieve();
+		if( netMod.recievedStuff )
+		{
+			processRecieve( netMod.recieveBuffer );
+			netMod.recieveBuffer.clear();
+			netMod.recievedStuff = false;
+		}
+		inMod.getInput();
+		if( inMod.gotInput )
+		{
+			processRecieve( inMod.inputBuffer );
+			inMod.inputBuffer.clear();
+			inMod.gotInput = false;
+		}
 		SDL_Delay( DELAY_AMOUNT );
 		renderView();
 	}
-	close_SDL();
-	return 1;
+}
+
+void engine::processInput( std::string input )
+{
+	std::cout << input << std::endl;
+	netMod.sendServer( input + "\n" );
+}
+
+void engine::processRecieve( std::string message )  //figures out what to do with the recieved stuff
+{
+	std::cout << message << std::endl;
+	if( message == "!map" )
+	{
+		updateMap( netMod.recieveLine() );
+	}
+	//newMessage( message );
+	//printMessages();
+	//writeDownAt( message, 0,0 );
+	//std::cout << message << std::endl;
 }
