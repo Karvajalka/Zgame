@@ -5,16 +5,16 @@
 #include <string>
 #include "dvector.h"
 
-void initializeMap();
-void printMap();
-void updateMap( std::string newView );
 class Map
 {
 	public:
-		bool updated;
 		std::vector< std::vector< char > > mapArray;
 		std::vector< dVector > blinkers;
+		int viewSize;
+		int rotation;
 };
 
+void initializeMap( Map * map );
+void updateMap( std::string newView, Map * map );
 
 #endif

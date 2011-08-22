@@ -1,11 +1,7 @@
 #include <iostream>
+#include <sstream>
 #include <cstring>
 #include "network.h"
-#include "SDL_print.h"
-#include "SDL_net.h"
-#include "gui.h"
-#include "messages.h"
-#include "map.h"
 
 int netModule::initConnection() 
 {
@@ -25,47 +21,49 @@ int netModule::initConnection()
 		std::cout << "Failed to open socket, shutting down \n";
 		return 0;
 	}
-        set = SDLNet_AllocSocketSet( 1 );
-        SDLNet_TCP_AddSocket( set, serverSocket );
-        return 1;
+	set = SDLNet_AllocSocketSet( 1 );
+	SDLNet_TCP_AddSocket( set, serverSocket );
+	gotConnection = true;
+	return gotConnection;
 }
 
 void netModule::sendServer( std::string message )  //sends the string message to the server
 {
-	SDLNet_TCP_Send( serverSocket, message.c_str(), message.size() );
+	if( gotConnection )
+	{
+		std::string str;
+		std::stringstream out;
+		out << message.size();
+		str = out.str();
+		for( ;str.size() < 3; str.insert( 0, "0" ) ){}
+		std::cout << str << " " << message << std::endl;
+		SDLNet_TCP_Send( serverSocket, str.c_str(), str.size() );
+		SDLNet_TCP_Send( serverSocket, message.c_str(), message.size() );
+		std::cout << str << " " << message << std::endl;
+	}
 }
 
-void netModule::checkRecieve()  //checks if there is something to recieve and recives it in parts
+void netModule::recieve()
 {
-	if( SDLNet_CheckSockets( set, 0) )
+	if( SDLNet_CheckSockets( set, 0 ) )
 	{
 		if( SDLNet_SocketReady( serverSocket ))
 		{
-			char buffer[2];
-			SDLNet_TCP_Recv( serverSocket, buffer, 1 );
-			if( buffer[0] != '\n' )
-				recieveBuffer.push_back( buffer[0] );
-			else
-			{
-				recievedStuff = true;
-				return;
-			}
+			char buffer[4];
+			SDLNet_TCP_Recv( serverSocket, buffer, 3 );
+			
+			std::istringstream intStream( buffer );
+			int incPackSize = 0;
+			intStream >> incPackSize;
+			
+			char newBuffer[ incPackSize + 1 ];
+			SDLNet_TCP_Recv( serverSocket, newBuffer, incPackSize );
+			
+			recieveBuffer.clear();
+			recieveBuffer = newBuffer;
+			recievedStuff = true;
+			return;
 		}
 	}
 }
 
-std::string netModule::recieveLine()
-{
-	char buffer[2];
-	std::string recieved;
-	while( true )
-	{
-		SDLNet_TCP_Recv( serverSocket, buffer, 1 );
-		if( buffer[0] != '\n' )
-			recieved.push_back( buffer[0] );
-		else
-		{
-			return recieved;
-		}
-	}
-}

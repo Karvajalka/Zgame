@@ -1,67 +1,86 @@
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
 #include "read_configs.h"
-bool read_configs()
+#include "main.h"
+
+bool readConfigs( engine * e )
 {
-	readSystemCfg();
-	readColourCfg();
-	readControlCfg();
+	if( readSystemCfg() )
+		std::cout << "System.cfg read" << std::endl;
+	if( readColourCfg( &(e->grapMod.colours) ) )
+		std::cout << "Colours read" << std::endl;
+	if( readControlCfg( e ) )
+		std::cout << "Controls read" << std::endl;
+	return true;
 }
 
-void readColourCfg()
+bool readColourCfg( std::vector< SDL_Colour* > * colours )
 {
-
-}
-
-void readSystemCfg()
-{
-
-}
-
-void readControlCfg()
-{
-
-}
-/*
-void readConfig()
-{
-    char hodler[256];
-    string temp = "";
-    fstream config;
-    config.open( "config.cfg" );
-    while(temp != "end")
+	char buffer[ 256 ];
+	int blue, green, red;
+	
+	std::string temp;
+	std::fstream config;
+	config.open( "colours.cfg" );
+    
+    int failSafe = 0;
+    /*
+     * To make sure it doesn't just keep reading the file on and on, if
+     * there is no "end" in the end of the file. It reads only the first
+     * 100 lines
+     */
+    while( failSafe < 100 )
     {
-        config.getline(hodler, 256);
-        temp = hodler;
-        process_input_moar(temp);
-    }
-}
-
-void readColours()
-{
-    char hodler[256];
-    string temp = "";
-    fstream config;
-    config.open( "colours.cfg" );
-    int blue, green, red;
-
-    config.getline(hodler, 256);
-    temp = hodler;
-    int x = 8;
-    while(temp != "end")
-    {
-        config.getline(hodler, 256);
-        red = atoi(hodler);
-        config.getline(hodler, 256);
-        green = atoi(hodler);
-        config.getline(hodler, 256);
-        blue = atoi(hodler);
-        config.getline(hodler, 256);
-        temp = hodler;
+		failSafe++;
+		
+		config.getline( buffer, 256 );
+		temp = buffer;
+		
+		if( temp == "end" )
+			return true;
+		
+		config.getline( buffer, 256 );
+		red = atoi( buffer );
+		config.getline( buffer, 256 );
+		green = atoi( buffer );
+		config.getline( buffer, 256 );
+		blue = atoi( buffer );
 		SDL_Color * c = new SDL_Color;
 		c->r = red;
 		c->b = blue;
 		c->g = green;
-		vColors.push_back(c);
-    }
+		
+		//this should be there but it makes it crash???
+		colours->push_back( c );
+	}
 }
-*/
 
+bool readSystemCfg()
+{
+
+}
+
+bool readControlCfg( engine * e )
+{
+	char buffer[256];
+	std::string temp = "";
+	std::fstream config;
+	config.open( "config.cfg" );
+    
+	int failSafe = 0;
+    /*
+     * To make sure it doesn't just keep reading the file on and on, if
+     * there is no "end" in the end of the file. It reads only the first
+     * 100 lines
+     */
+	while ( failSafe < 100 )  
+	{
+		failSafe++;
+		config.getline( buffer, 256 );
+		temp = buffer;
+		if( temp == "end" )
+			return true;
+		e->processInput( temp );
+	}
+}

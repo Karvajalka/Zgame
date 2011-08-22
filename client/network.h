@@ -8,6 +8,7 @@ class netModule
 {
 	public:
 		bool recievedStuff;
+		bool gotConnection;
 		std::string recieveBuffer;
 		
 		int port;// port  = 2054;
@@ -18,15 +19,17 @@ class netModule
 		
 		int initConnection();
 		void sendServer( std::string message );
-		void checkRecieve();
-		std::string recieveLine();
+		void recieve();
+
 		netModule()
 		{
 			port = 2054;
 			ipS = "127.0.0.1";
+			gotConnection = false;
 		}
 
 };
 
 void processRecieve( std::string message );
+
 #endif

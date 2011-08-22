@@ -3,35 +3,14 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "gui.h"
-#include "messages.h"
-#include "SDL_print.h"
-#include "SDL_init.h"
 #include "map.h"
-
-extern int xSize;
-extern int ySize;
 
 /*
 extern const int messageViewHeight;
 extern const int messageViewLength;
 extern const int messageXdelta;
 extern std::vector< std::string > messageView;
-*/
 
-SDL_Rect viewRect = newRectangle( 0, 0, 21, 21 );
-SDL_Rect messageRect = newRectangle( 24, 0, 40, 20 );
-
-extern SDL_Surface *screen;
-extern TTF_Font *font;
-
-
-void renderView()
-{
-	fillRect( viewRect, 0, 0, 0 );
-	printMap();
-	SDL_Flip(screen);
-}
-/*
 GuiArea chatBox( 20, 0, 40, 20 );
 
 void initializeGui()
