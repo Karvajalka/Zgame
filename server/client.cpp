@@ -1,28 +1,24 @@
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include "client.h"
+#include "clientmodule.h"
+#include "world.h"
 #include "string_ext.h"
-#include "network.h"
 #include "convert.h"
 
-extern std::vector< Client* > clientVec;
 int viewDistance = 10;
-
-void playerCheck()
-{
-	for( int x = 0; x < clientVec.size(); x++ )
-		clientVec[x]->sendView();
-}
 
 void Client::processMove( std::string direction )
 {
-	dVector newPos = pos + convertMoveCommand( direction );
+	dVector newPos = ( position + convertMoveCommand( direction  ) );
 	if( !area->getTile( newPos )->block )
-		pos = newPos;
+		position = newPos;
 }
 
-void Client::processRecieve()
+void Client::processRecieve( std::string recieveBuffer )
 {
+	std::cout <<recieveBuffer<<std::endl;
 	std::vector<std::string> words = dismemberString( recieveBuffer );
 	if( words.size() > 0 )
 	{
@@ -37,12 +33,16 @@ void Client::processRecieve()
 			std::string stuffSaid;
 			for( int x = 1; x < words.size() ; x++ )
 				stuffSaid += ( " " + words[x] );
-			sendToAll( clientName + " says:" + stuffSaid + "\n" );
+			clientMod->sendAll( clientName + " says:" + stuffSaid + "\n" );
 			std::cout << clientName << " says:" << stuffSaid << std::endl;
 		}
 		else if( words[0] == "move" )
 		{
 			processMove( words[1] );
+		}
+		else if( words[0] == "x" )
+		{
+			 area->getTile( position )->base = '#';
 		}
 	}
 }
@@ -50,22 +50,32 @@ void Client::processRecieve()
 void Client::sendView()
 {
 	std::string sendBuffer;
-	sendBuffer.clear();
-	sendBuffer = "!map\n";
+	send( "!map" );
 	for( int x = 0 - viewDistance; x < viewDistance + 1; x++ )
 	{
 		for( int y = 0 - viewDistance; y < viewDistance + 1; y++ )
 		{
-			Tile* t = area->getTile( pos + dVector ( x,y ) );
-			sendBuffer.push_back( t->base );
+			dVector thisPos(0,0);
+			thisPos = thisPos + position + dVector(x,y);
+			
+			if( x == 0 && y == 0 )
+				sendBuffer.push_back( '@' );
+			else if( thisPos.x < 0 || thisPos.y < 0 || thisPos.x > area->dimensions.x || thisPos.y > area->dimensions.y )
+				sendBuffer.push_back( ' ' );
+			else
+			{
+				Tile* t = area->getTile( position + dVector ( x,y ) );
+				sendBuffer.push_back( t->base );
+			}
 		}
-		//sendBuffer.push_back( '\n' );
 	}
-	sendBuffer.push_back( '\n' );
+	
+	
+	sendBuffer[ ( viewDistance ) * ( viewDistance*2 +2 )  ] = '@';
 	send( sendBuffer );
 }
 
-void Client::send( std::string str )
+inline void Client::send( std::string message )
 {
-	SDLNet_TCP_Send( clientSocket, str.c_str(), str.size() );
+	subNetMod->sendTo( message );
 }

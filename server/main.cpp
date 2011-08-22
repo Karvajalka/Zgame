@@ -8,13 +8,11 @@
 #endif
 
 #include "main.h"
-#include "network_init.h"
 #include "network.h"
 #include "world.h"
 #include "client.h"
 
 const int DELAY_AMOUNT = 20;
-World * world = new World;
 
 #if defined(WIN32)
 
@@ -27,17 +25,22 @@ int main()
 
 #endif
 {
-	if ( !initNetwork() )
-		return 0;
+	MainModule game;
+	game.start();
+}
+
+void MainModule::start()
+{
+	if ( !netMod.initNetwork() )
+		return;
 	Area * a = new Area();
-	world->areaVec.push_back(a);
-	world->areaVec[0]->id = 9;
-	printArea( 0, world );
+	worldMod.areaVec.push_back(a);
+	worldMod.areaVec[0]->id = 9;
+	printArea( 0, &worldMod );
 	while ( true )  //mainloop
 	{
-		checkNewConnection(); //check for incoming connections
-		checkRecieve();  //check for incoming stuff
-		playerCheck();
+		netMod.checkNewConnection(); //check for incoming connections
+		clientMod.playerCheck();  // check player input and send view();
 		SDL_Delay( DELAY_AMOUNT );
 	}
 }

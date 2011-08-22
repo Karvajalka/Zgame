@@ -1,80 +1,55 @@
 #include <iostream>
-#include <vector>
+#include <sstream>
 #include "network.h"
-#include "SDL_net.h"
 #include "client.h"
+#include "clientmodule.h"
 
-extern SDLNet_SocketSet socketSet;
-extern TCPsocket listenSocket;
-std::vector< TCPsocket > clientSockets;  //list of all active sockets
-std::vector< Client* > clientVec;
-
-extern World * world;
-int playerCount = 0;
-
-void sentToClient( TCPsocket theclient, std::string str ) // send string to client
+void NetworkModule::sentToClient( TCPsocket theClient, std::string str ) // send string to client
 {
-	SDLNet_TCP_Send( theclient, str.c_str(), str.size() );
+	std::string str2;
+	std::stringstream out;
+	out << str.size();
+	str2 = out.str();
+	for( ;str2.size() < 3; str2.insert( 0, "0" ) ){} // add 0, so that the number is 001, 021, 322 styled, always three chars
+	SDLNet_TCP_Send( theClient, str2.c_str(), str2.size() );
+	SDLNet_TCP_Send( theClient, str.c_str(), str.size() );
 }
 
-void checkNewConnection()
+void NetworkModule::checkNewConnection()
 {
-	TCPsocket cSocket; // client connects to this socket
+	SubNetworkModule * subNet = new SubNetworkModule;
 	IPaddress *remoteIP;
-	if( cSocket = SDLNet_TCP_Accept( listenSocket ) )
+	if( subNet->socket = SDLNet_TCP_Accept( listenSocket ) )
 	{
-		if( remoteIP = SDLNet_TCP_GetPeerAddress( cSocket ) )
+		if( remoteIP = SDLNet_TCP_GetPeerAddress( subNet->socket ) )
 			std::cout << "Host connected:" << SDLNet_Read32(&remoteIP->host) << "::" << SDLNet_Read16(&remoteIP->port) << std::endl;
 		else
 			std::cout << "SDLNet_TCP_GetPeerAddress:" << SDLNet_GetError() << std::endl;
 
-		sentToClient( cSocket, "Welcome_visitor\n" ); 
-		SDLNet_TCP_AddSocket( socketSet, cSocket );  // add the socket to socketSet
-		Client * p = new Client;		//create new client and assign the socket to it, pushpack the client + socket to different lists
-		p->clientSocket = cSocket;
-		p->area = world->areaVec[0];
-		clientVec.push_back( p );
-		clientSockets.push_back( cSocket );
-		playerCount++;
+		clientMod->newClient( subNet );
 	}
 }
 
-void checkRecieve()
+bool NetworkModule::initNetwork()
 {
-	int activeSockets = SDLNet_CheckSockets( socketSet, 0);  // amount of sockets that should be ready
-	for( int sockNum = 0; sockNum < clientSockets.size(); sockNum++ )
+	if ( SDLNet_Init() < 0 )
 	{
-		if ( SDLNet_SocketReady( clientSockets[sockNum] ) )
-		{
-			activeSockets--; // decrease the amount of sockets that need to be handled
-			char buffer[2];
-			if ( SDLNet_TCP_Recv( clientSockets[sockNum], buffer, 1 ) > 0 )  //recieving something 1 byte at a time
-			{
-				if( buffer[0] != '\n' )   //recieve ends at a newline char, keep pushing back to recievebuffer until we encounter one
-					clientVec[ sockNum ]->recieveBuffer.push_back( buffer[0] );
-				else
-				{
-					clientVec[ sockNum ]->processRecieve();
-					clientVec[ sockNum ]->recieveBuffer.clear(); // clear the buffer for new recieve
-				}
-			}
-			else   // if the client disconnected, remove him from all vectors/sets/lists
-			{
-				std::cout << "Client disconnected\n" ;
-				SDLNet_TCP_DelSocket( socketSet, clientSockets[sockNum] );
-				delete clientVec[ sockNum ];
-				clientVec.erase( clientVec.begin() + sockNum );
-				clientSockets.erase( clientSockets.begin() + sockNum );
-			}
-			if( !activeSockets )  //stop when all active sockets have been handled
-				return;
-		}
+		std::cout << "SDLNET_Init() failed, shutting down \n";
+		return 0;
 	}
-}
 
-void sendToAll( std::string message )   // iterates all the connected clients and sends the message
-{
-	for( int x = 0; x < clientSockets.size(); x++ )  
-		SDLNet_TCP_Send( clientVec[x]->clientSocket, message.c_str(), message.size() );
-}
+	if ( SDLNet_ResolveHost( &ip, NULL, port ) < 0 )
+	{
+		std::cout << "Failed to resolve host, shutting down \n";
+		return 0;
+	}
 
+	if ( !( listenSocket = SDLNet_TCP_Open( &ip ) ) )
+	{
+		std::cout << "Failed to open socket, shutting down \n";
+		return 0;
+	}
+	socketSet = SDLNet_AllocSocketSet( maxPlayers );  //avaliable socketSpots
+
+	return 1;
+}

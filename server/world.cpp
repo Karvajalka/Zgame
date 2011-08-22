@@ -15,14 +15,14 @@ Tile* Area::getTile( dVector pos )
 		return tilemap[ 1][ 1 ];
 }
 
-void World::unloadArea( int a )
+void WorldModule::unloadArea( int a )
 {			
 	delete areaVec[ a ];
 	areaVec.erase( areaVec.begin() + a );
 	return;
 }
 
-void printArea( int a, World * world )
+void printArea( int a, WorldModule * world )
 {
 	Area * area = world->areaVec[a];
 	for( int aY = 0; aY < areaSize; aY++ )
