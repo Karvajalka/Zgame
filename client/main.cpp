@@ -31,19 +31,19 @@ int main()
 
 void engine::start()
 {
-	std::cout << "Starting" << std::endl;
+	std::cout << std::endl << "Starting" << std::endl;
 	
 	if( !grapMod.init_SDL() )
 		return;
 		
-	std::cout << "SDL initializedl" << std::endl;
+	std::cout << "	-SDL initialized" << std::endl;
 	
-	if( netMod.initConnection() == -1 )
+	if( netMod.initConnection() == 0)
 	{
-		std::cout << "failed to establish connection" << std::endl;
+		std::cout << "	-Failed to establish connection" << std::endl;
 		return;
 	}
-	std::cout << "Connection established" << std::endl;
+	std::cout << "	-Connection established" << std::endl;
 	
 	initializeMap( &grapMod.defaultView );
 	
@@ -116,11 +116,22 @@ void engine::processInput( std::string input )
 		}
 	}
 	
+	if( words.size() == 1 && words[0].size() == 1 )
+	{
+		std::string temp = inMod.checkForBind( words[0] );
+		if( temp != "" )
+			input = temp;
+	}
+	
 	if( words[0][0] == '/' )
 	{
 		if( words[0] == "/bind" )
+		{
 			if( words.size() > 2 )
+			{
 				inMod.addBind( words[1], words[2] );
+			}
+		}
 		else if( input == "/quit" )
 			running = false;
 	}

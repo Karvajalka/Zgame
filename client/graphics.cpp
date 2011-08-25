@@ -36,11 +36,11 @@ bool graphicsModule::loadFont()
    
    if ( font == NULL )
    {
-      std::cout << "Can't load the damned font" << std::endl;
+      std::cout << "	-Can't load the damned font" << std::endl;
       return false;
    }
    
-   std::cout << "font loaded" << std::endl;
+   std::cout << "	-Font loaded" << std::endl;
    return true;
 }
 

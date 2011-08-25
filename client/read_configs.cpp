@@ -2,16 +2,22 @@
 #include <iostream>
 #include <stdlib.h>
 #include "read_configs.h"
+#include "stringExt.h"
 #include "main.h"
 
 bool readConfigs( engine * e )
 {
+		std::cout << "Reading Config Files" << std::endl;
+		
 	if( readSystemCfg() )
-		std::cout << "System.cfg read" << std::endl;
+		std::cout << "	-System.cfg read" << std::endl;
+		
 	if( readColourCfg( &(e->grapMod.colours) ) )
-		std::cout << "Colours read" << std::endl;
+		std::cout << "	-Colours read" << std::endl;
+		
 	if( readControlCfg( e ) )
-		std::cout << "Controls read" << std::endl;
+		std::cout << "	-Controls read" << std::endl;
+		
 	return true;
 }
 

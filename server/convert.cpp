@@ -15,9 +15,9 @@ dVector convertMoveCommand( std::string cmd )
 	else if( cmd == "southeast" )
 		return dVector(1,1);
 	else if( cmd == "northeast" )
-		return dVector(-1,1);
-	else if( cmd == "southwest" )
 		return dVector(1,-1);
+	else if( cmd == "southwest" )
+		return dVector(-1,1);
 	else
 		return dVector(0,0);
 }

@@ -111,8 +111,9 @@ std::string inputModule::checkForBind( std::string key )
 	 */
 	std::map< std::string,std::string>::iterator it;
 	it = binds.find( key );
+	
 	if( it != binds.end() )
-		return (*it).second;
+		return it->second;
 	else
 		return "";
 }
@@ -125,10 +126,12 @@ void inputModule::addBind( std::string key, std::string word )
 	 * if it hasn't, it just adds a new pair to the aliases. If it does
 	 * exist, it first deletes the old one and adds a new one after that
 	 */
+	
 	std::map< std::string,std::string>::iterator it;
+	
 	it = binds.find( key );
 	
-	if( it != binds.end() ) 
+	if( it == binds.end() ) 
 		binds[key] = word;
 	else
 	{

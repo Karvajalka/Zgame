@@ -11,9 +11,11 @@ void initializeMap( Map * map )
 	map->mapArray.resize( viewSize );
 	map->viewSize = viewSize;
 	map->rotation = 0;
+	
 	for( int x = 0; x < viewSize; x++ )
 		map->mapArray[x] = tiles;
-	std::cout << "map initialized " << std::endl;
+		
+	std::cout << "-Map initialized " << std::endl;
 }
 
 void updateMap( std::string newView, Map * map )
