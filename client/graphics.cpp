@@ -124,6 +124,14 @@ void graphicsModule::printMap()
 	}
 }
 
+void graphicsModule::updateChat( )
+{
+	for( int i = 0; i < chat->height; i++ )
+		writeDownAt( chat->chatText[ (chat->newest + i)%chat->height ], 20, i );
+	
+	SDL_Flip( screen );
+}
+
 void graphicsModule::rotate( Map* map )
 {
 	Map newView = *map;
@@ -139,6 +147,7 @@ void graphicsModule::rotate( Map* map )
 				temp *= abs(y);
 			else
 				temp *= abs(x);
+				
 			while( temp > 0 )
 			{
 				temp--;
@@ -162,7 +171,7 @@ void graphicsModule::rotate( Map* map )
 					{
 						if( x > 0 && y > 0 )
 							y--;
-						else if( x  > 0 && y < 0 )
+						else if( x > 0 && y < 0 )
 							x--;
 						else if( x < 0 && y < 0 )
 							y++;

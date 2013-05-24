@@ -40,7 +40,7 @@ void netModule::sendServer( std::string message )  //sends the string message to
 		SDLNet_TCP_Send( serverSocket, str.c_str(), str.size() );
 		SDLNet_TCP_Send( serverSocket, message.c_str(), message.size() );
 		
-		std::cout << str << " " << message << std::endl;
+		std::cout << str << ": " << message << std::endl;
 	}
 }
 

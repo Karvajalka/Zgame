@@ -4,8 +4,8 @@
 void ClientModule::playerCheck()
 {
 	checkRecieve();
-	for( int x = 0; x < clientVec.size(); x++ )
-		clientVec[x]->sendView();
+	//for( int x = 0; x < clientVec.size(); x++ )
+		//clientVec[x]->sendView();
 }
 
 void ClientModule::newClient( SubNetworkModule * subNet )

@@ -57,7 +57,7 @@ void engine::mainLoop()
 		netMod.recieve();
 		if( netMod.recievedStuff )
 		{
-			processRecieve( netMod.recieveBuffer );
+			processRecieve();
 			netMod.recieveBuffer.clear();
 			netMod.recievedStuff = false;
 		}
@@ -135,7 +135,7 @@ void engine::processInput( std::string input )
 		else if( input == "/quit" )
 			running = false;
 	}
-	else if( input == "a" )
+	else if( input == "y" )
 	{
 		if( grapMod.defaultView.rotation > 0 )
 			grapMod.defaultView.rotation--;
@@ -143,7 +143,7 @@ void engine::processInput( std::string input )
 			grapMod.defaultView.rotation = 7;
 			std::cout << grapMod.defaultView.rotation << std::endl;
 	}
-	else if( input == "d" )
+	else if( input == "u" )
 	{
 		if( grapMod.defaultView.rotation < 7 )
 			grapMod.defaultView.rotation++;
@@ -162,10 +162,11 @@ void engine::processInput( std::string input )
 	}
 }
 
-void engine::processRecieve( std::string message )  //figures out what to do with the recieved stuff
+void engine::processRecieve()  //figures out what to do with the recieved stuff
 {
-	//std::cout << message << std::endl;
-	if( message == "!map" )
+	//std::cout<<message<<std::endl;
+	std::cout << netMod.recieveBuffer << std::endl;
+	if( netMod.recieveBuffer == "map" )
 	{
 		netMod.recieve();
 		updateMap( netMod.recieveBuffer, &grapMod.defaultView );
@@ -173,6 +174,12 @@ void engine::processRecieve( std::string message )  //figures out what to do wit
 		{
 			grapMod.rotate( &grapMod.defaultView );
 		}
+	}
+	else //this crashes atm
+	{
+		netMod.recieve();
+		//grapMod.chat->updateChat( &netMod.recieveBuffer );
+		//grapMod.updateChat();
 	}
 	//newMessage( message );
 	//printMessages();

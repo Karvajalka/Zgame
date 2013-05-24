@@ -33,3 +33,15 @@ void printMessages()
 		//writeDownAt( messageView[y], messageXdelta, y );
 	SDL_Flip( screen );
 }*/
+
+void chatClass::updateChat( std::string * s )
+{
+	int neededRows = s->size()/width + 1;
+	for( int i = 0; i < neededRows; i++ )
+	{
+		char buffer[width];
+		s->copy( buffer, width, i*width );
+		chatText[ (newest - neededRows + i)%height ] = buffer;
+	}
+	newest = (neededRows+newest)%height;
+}

@@ -45,12 +45,14 @@ void Client::processRecieve( std::string recieveBuffer )
 			 area->getTile( position )->base = '#';
 		}
 	}
+	sendView();
+	
 }
 
 void Client::sendView()
 {
 	std::string sendBuffer;
-	send( "!map" );
+	send( "map" );
 	for( int x = 0 - viewDistance; x < viewDistance + 1; x++ )
 	{
 		for( int y = 0 - viewDistance; y < viewDistance + 1; y++ )
@@ -69,8 +71,6 @@ void Client::sendView()
 			}
 		}
 	}
-	
-	
 	sendBuffer[ ( viewDistance ) * ( viewDistance*2 +2 )  ] = '@';
 	send( sendBuffer );
 }

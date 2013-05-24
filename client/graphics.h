@@ -2,8 +2,11 @@
 #define GRAPHICS_H
 #include <vector>
 #include <string>
+
 #include "SDL.h"
 #include "SDL_ttf.h"
+
+#include "messages.h"
 #include "map.h"
 
 class graphicsModule
@@ -13,7 +16,7 @@ class graphicsModule
 		TTF_Font *font;
 		int SCREEN_WIDTH;
 		int SCREEN_HEIGHT;
-		int SCREEN_BPP ;
+		int SCREEN_BPP;
 		
 		bool space;
 		SDL_Rect defPos;
@@ -29,6 +32,9 @@ class graphicsModule
 		int ySize;
 		SDL_Rect viewRect;
 		
+		chatClass * chat;
+		void updateChat();
+		
 		bool init_SDL();
 		bool loadFont();
 		void close_SDL();
@@ -38,6 +44,7 @@ class graphicsModule
 		void update();
 		void printMap();
 		void rotate( Map* map );
+		
 		
 		SDL_Rect newRectangle( int x, int y, int w, int h );
 		SDL_Color newColour( int r, int b, int g );
@@ -50,6 +57,7 @@ class graphicsModule
 
 			bgColour = newColour( 0,0,0 );
 			frColour = newColour( 255,255,255 );
+			chat = new chatClass();
 			fontsize = 16; // SCREEN_WIDTH/70
 			borderSize = 4; // if you print a single char, this determines the amount of space around it. If this is 0 it looks quite bad
 			xSize = fontsize - borderSize;

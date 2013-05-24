@@ -39,7 +39,8 @@ class Area
 			for( int aY = 0; aY < areaSize; aY++ )
 				for( int aX = 0; aX < areaSize; aX++ )
 					tilemap[aX][aY] = new Tile( 0, '.' );
-			tilemap[14][14] ->base = '#';
+			for( int i = 2; i < 14; i++ )
+				tilemap[i][i]->base = '#';
 		}
 };
 

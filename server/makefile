@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++0x
-SCFLAGS = `sdl-config --cflags --libs` -lSDL_net 
+SCFLAGS = `sdl-config --cflags --libs` -lSDL_net -static-libgcc -static-libstdc++
 SERVERO = main.o network.o client.o string_ext.o convert.o world.o dvector.o subnetwork.o clientmodule.o
 
 all: $(SERVERO) zserver

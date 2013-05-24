@@ -7,7 +7,7 @@ const int viewSize = 21;
 void initializeMap( Map * map )
 {
 	std::vector< char > tiles;
-	tiles.insert(  tiles.begin(), viewSize, '.' );
+	tiles.insert(  tiles.begin(), viewSize, ',' );
 	map->mapArray.resize( viewSize );
 	map->viewSize = viewSize;
 	map->rotation = 0;

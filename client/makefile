@@ -1,7 +1,7 @@
 CC = g++
 CCFLAGS = -g -O2
 CLIENTO = graphics.o read_configs.o main.o input.o network.o messages.o map.o stringExt.o
-CCSFLAGS = `sdl-config --cflags --libs` 
+CCSFLAGS = `sdl-config --cflags --libs` -static-libgcc -static-libstdc++
 
 all: $(CLIENTO) client
 

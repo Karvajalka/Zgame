@@ -12,8 +12,8 @@ bool readConfigs( engine * e )
 	if( readSystemCfg() )
 		std::cout << "	-System.cfg read" << std::endl;
 		
-	if( readColourCfg( &(e->grapMod.colours) ) )
-		std::cout << "	-Colours read" << std::endl;
+	//if( readColourCfg( &(e->grapMod.colours) ) )
+		//std::cout << "	-Colours read" << std::endl;
 		
 	if( readControlCfg( e ) )
 		std::cout << "	-Controls read" << std::endl;
