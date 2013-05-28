@@ -62,16 +62,12 @@ void Client::sendView()
 			
 			if( x == 0 && y == 0 )
 				sendBuffer.push_back( '@' );
-			else if( thisPos.x < 0 || thisPos.y < 0 || thisPos.x > area->dimensions.x || thisPos.y > area->dimensions.y )
-				sendBuffer.push_back( ' ' );
-			else
-			{
-				Tile* t = area->getTile( position + dVector ( x,y ) );
-				sendBuffer.push_back( t->base );
-			}
+
+			Tile* t = area->getTile( position + dVector ( x,y ) );
+			sendBuffer.push_back( t->base );
 		}
 	}
-	sendBuffer[ ( viewDistance ) * ( viewDistance*2 +2 )  ] = '@';
+	//sendBuffer[ ( viewDistance ) * ( viewDistance*2 +2 )  ] = '@';
 	send( sendBuffer );
 }
 

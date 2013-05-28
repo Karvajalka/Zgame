@@ -1,3 +1,4 @@
+#include <time.h>
 #include <iostream>
 #include "SDL.h"
 
@@ -31,12 +32,14 @@ int main()
 
 void MainModule::start()
 {
+	srand (time(NULL));
 	if ( !netMod.initNetwork() )
 		return;
-	Area * a = new Area();
+	Area * a = new Area( 101, 101 );
 	worldMod.areaVec.push_back(a);
 	worldMod.areaVec[0]->id = 9;
 	printArea( 0, &worldMod );
+	std::cout<<"Starting mainloop"<<std::endl;
 	while ( true )  //mainloop
 	{
 		netMod.checkNewConnection(); //check for incoming connections

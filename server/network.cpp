@@ -17,7 +17,7 @@ void NetworkModule::sentToClient( TCPsocket theClient, std::string str ) // send
 
 void NetworkModule::checkNewConnection()
 {
-	SubNetworkModule * subNet = new SubNetworkModule;
+	SubNetworkModule * subNet = new SubNetworkModule();
 	IPaddress *remoteIP;
 	if( subNet->socket = SDLNet_TCP_Accept( listenSocket ) )
 	{

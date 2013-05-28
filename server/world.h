@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include "dvector.h"
-extern int areaSize;
 
 class Trigger
 {
@@ -23,25 +22,30 @@ class Tile
 		}
 };
 
+class Voronoi
+{
+	public:
+		int width, height;
+		std::vector< dVector > * points;
+		std::vector< int > world;
+		void generatePoints( int amount );
+		void generateDiagram( std::vector< dVector > * usedPoints );
+		int distance( dVector p1, dVector p2 );
+		
+		Voronoi( int xs, int ys );
+};
+		
+		
+
 class Area
 {
 	public:
 		int id;
-		dVector dimensions;
-		std::vector< std::vector< Tile* > > tilemap;
+		dVector dim;
+		std::vector< Tile* > tilemap;
 		Tile* getTile( dVector pos );
-		Area()
-		{
-			dimensions( areaSize, areaSize );
-			std::vector< Tile* > tiles( areaSize, (Tile*)NULL );
-			for( int a = 0; a < areaSize; a++ )
-				tilemap.push_back( tiles );
-			for( int aY = 0; aY < areaSize; aY++ )
-				for( int aX = 0; aX < areaSize; aX++ )
-					tilemap[aX][aY] = new Tile( 0, '.' );
-			for( int i = 2; i < 14; i++ )
-				tilemap[i][i]->base = '#';
-		}
+		Voronoi * voro;
+		Area( int xs, int ys );
 };
 
 class WorldModule
