@@ -13,7 +13,7 @@ class chatClass
 		std::vector< std::vector<int> > chatColour;
 		
 		int height, scroll, newest, width;
-		void updateChat( std::string * s );
+		void updateChat( std::string s );
 		
 		chatClass()
 		{

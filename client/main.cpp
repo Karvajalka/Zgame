@@ -178,8 +178,8 @@ void engine::processRecieve()  //figures out what to do with the recieved stuff
 	else //this crashes atm
 	{
 		netMod.recieve();
-		//grapMod.chat->updateChat( &netMod.recieveBuffer );
-		//grapMod.updateChat();
+		grapMod.chat->updateChat( netMod.recieveBuffer );
+		grapMod.updateChat();
 	}
 	//newMessage( message );
 	//printMessages();

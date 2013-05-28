@@ -34,14 +34,19 @@ void printMessages()
 	SDL_Flip( screen );
 }*/
 
-void chatClass::updateChat( std::string * s )
+void chatClass::updateChat( std::string s )
 {
-	int neededRows = s->size()/width + 1;
+	int neededRows = s.size()/width + 1;
 	for( int i = 0; i < neededRows; i++ )
 	{
 		char buffer[width];
-		s->copy( buffer, width, i*width );
-		chatText[ (newest - neededRows + i)%height ] = buffer;
+		int length = width;
+		if( length == neededRows - 1 )
+			length = s.size() - neededRows*width;
+		s.copy( buffer, length, i*width );
+		int slot = (newest - neededRows + i);
+		slot = slot%height;
+		chatText[ 0 ] = buffer;
 	}
 	newest = (neededRows+newest)%height;
 }
